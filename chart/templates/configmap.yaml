@@ -1,0 +1,15 @@
+{{- /* ConfigMaps */ -}}
+{{- range $cm := .Values.package.configMaps -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ required "A name is required for each configMap" $cm.name }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+data:
+  {{- if kindIs "string" $cm.data -}}
+  {{- tpl $cm.data $ | nindent 2 -}}
+  {{- else -}}
+  {{- tpl (toYaml $cm.data) $ | nindent 2 -}}
+  {{- end -}}
+{{- end -}}
