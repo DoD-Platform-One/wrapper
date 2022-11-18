@@ -1,0 +1,13 @@
+{{- /* Adds additional policies based on values */ -}}
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "additionalPolicies" false .Values.package.network) -}}
+{{- range $policy := .Values.package.network.additionalPolicies -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $policy.name }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  {{- toYaml $policy.spec | nindent 2 }}
+{{- end -}}
+{{- end -}}

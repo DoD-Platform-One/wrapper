@@ -1,0 +1,136 @@
+# -- Passdown values from Big Bang
+bigbang:
+  domain: bigbang.dev
+  openshift: false
+  networkPolicies:
+    enabled: false
+    controlPlaneCidr: 0.0.0.0/0
+    controlPlaneNode:
+  istio:
+    enabled: false
+  monitoring:
+    enabled: false
+  addons:
+    authservice:
+      enabled: false
+      values:
+        selector:
+          key: protect
+          value: keycloak
+
+# -- Passdown values from package
+package:
+  # -- (Required) Name of the package
+  name: ""
+
+  namespace:
+    # -- Name of the namespace.  Defaults to the same name as the package.
+    # @default -- Same as package.name
+    name:
+
+  istio:
+    # -- Toggles sidecar injection into the package.  Enabling this allows [mTLS](https://en.wikipedia.org/wiki/Mutual_authentication#mTLS).
+    injection: true
+    # -- Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/).
+    # @default -- If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace.
+    peerAuthentications: []
+    # - name: sample
+    #   # -- Spec for peer authentication [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication).
+    #   spec:
+    #     mtls:
+    #       # -- mtls mode for peer authentication (must be capitalized)
+    #       mode: STRICT
+    #     # -- Optional [LabelSelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta) for scope.
+    #     selector: {}
+    #     # -- Optional mtls mode for specific ports in map<uint32, MutualTLS> format.
+    #     portLevelMtls: {}
+    hosts: []
+    # - # -- List of hostnames (without domain) to match for routing requests.  Wildcards are supported. (e.g. ["grafana"])
+    #   names: []
+    #   # -- Override domain suffix for these hosts.  Defaults to bigbang's `domain` value.
+    #   domain:
+    #   # -- List of gateways to listen for traffic matching the host.  Add `namespace/` if gateway is not in the `istio-system` namespace.
+    #   gateways: []
+    #   # -- List of pod selectors for host destination.  This is used for network traffic policies to allow ingress. The format follows [LabelSelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta).
+    #   # @default -- if no selectors are provided, defaults to matching the label "app.kubernetes.io/name: <package name>"
+    #   selectors: []
+    #   # -- Enable repeat traffic to go to the same pod
+    #   stickySessions: false
+    #   # -- Simple traffic routing to single service.
+    #   # @default -- if `destination` and `route` are blank, routes `http` traffic to the default port on a service with the same name as the package.
+    #   destination:
+    #     # -- Protocol of traffic.  Can be `http`, `tcp`, or `tls`.  [More info](https://istio.io/latest/docs/reference/config/networking/virtual-service/#VirtualService)
+    #     protocol: http
+    #     # -- Service to route traffic to.  Must be in package's namespace.  If left blank, defaults to the package name.
+    #     # @default -- same as package name
+    #     service:
+    #     # -- Service's port number to route traffic to.  If not defined, all ports will be allowed from Istio gateways into the pods.
+    #     # @default -- first port defined in service
+    #     port:
+    #   # -- Complex traffic routing - Override `http`, `tcp`, or `tls` sections in Virtual Service.  [More info](https://istio.io/latest/docs/reference/config/networking/virtual-service/#VirtualService)
+    #   route: {}
+    #   # # Examples
+    #   # http: {}
+    #   # tcp: {}
+    #   # tls: {}
+
+  monitor:
+    # -- Toggle automatic setup of encrypted metrics via https.  Requires Istio injection.  Strict mTLS relies on this being enabled.
+    encryptedMetrics: true
+    # -- Services to monitor using Prometheus.  Each service is specified as `name: "", [spec: {}](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitorSpec)`
+    services: []
+    # - # -- Name to use for the ServiceMonitor
+    #   # @default -- the package name is used by default
+    #   name: ""
+    #   # -- Specification for the ServiceMonitor.  [More info](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitorSpec)
+    #   # @default -- if not specified, `namespaceSelector` is set to the package namespace and `selector` is set to match `app.kubernetes.io/name: <package name>`
+    #   spec: {}
+
+    alerts:
+
+    dashboards: {}
+
+  network:
+    # -- Toggle all policies on or off
+    policies: true
+    # -- Deny all traffic in the namespace by default
+    defaultDeny: true
+    # -- Allow traffic between pods inside the namespace
+    allowIntraNamespace: true
+    # -- Allow egress traffic from the namespace to the Kubernetes control plane for API calls
+    allowControlPlaneEgress: false
+    # -- Allow egress traffic from the namespace to the DNS port
+    allowDnsEgress: true
+    # -- Allow https egress to internet from specific pods
+    allowHttpsEgress: []
+    # - name: updates
+    #   selector:
+    #     matchLabels:
+    #       app.kubernetes.io/name: example
+    # -- Custom egress/ingress policies to deploy.  [More info](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#networkpolicy-v1-networking-k8s-io)
+    additionalPolicies: []
+    # - name: name-of-policy
+    #   spec: {} # See Network Policy spec
+
+  # -- Secrets that should be created prior to Helm install
+  secrets: {}
+  #   # -- Name of secret to create
+  # - name:
+  #   # -- Type of secret
+  #   type: Opaque
+  #   # -- Data to include in secret.  Can include helm template syntax.
+  #   data: {}
+
+  # -- ConfigMaps that should be created prior to Helm install
+  configMaps: {}
+  #   # -- Name of configMap to create
+  # - name:
+  #   # -- Data to include in configMap.  Can include helm template syntax.
+  #   data: {}
+
+  sso:
+    # -- Toggle AuthService SSO for package; Chain must be setup in Authservice for this to work
+    enabled: false
+
+  # -- Pass through values to this package's upstream Helm chart
+  values: {}

@@ -1,0 +1,21 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "allowInstranamespace" true .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-intranamespace" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows egress and ingress traffic between any pods in the namespace
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from:
+    - podSelector: {}
+  egress:
+  - to:
+    - podSelector: {}
+{{- end -}}

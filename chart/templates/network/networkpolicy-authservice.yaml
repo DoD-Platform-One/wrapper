@@ -1,0 +1,27 @@
+{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled .Values.bigbang.addons.authservice.enabled (dig "network" "policies" true .Values.package) (dig "sso" "enabled" false .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-authservice" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" . | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows egress traffic from protected pods to authservice
+spec:
+  podSelector:
+    matchLabels:
+      {{ dig "addons" "authservice" "values" "selector" "key" "protect" .Values.bigbang }}: {{ dig "addons" "authservice" "values" "selector" "value" "keycloak" .Values.bigbang }}
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - port: 10003
+    to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: authservice
+      namespaceSelector:
+        matchLabels:
+          # https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/457
+          app.kubernetes.io/name: authservice
+{{- end -}}

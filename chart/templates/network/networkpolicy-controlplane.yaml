@@ -1,0 +1,27 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "allowControlPlaneEgress" false .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-controlplane" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" . | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows egress from all pods to IPs in the Kubernetes control plane CIDR and port (if specified)
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ .Values.bigbang.networkPolicies.controlPlaneCidr }}
+        {{- if eq .Values.bigbang.networkPolicies.controlPlaneCidr "0.0.0.0/0" }}
+        # ONLY Block requests to cloud metadata IP
+        except:
+        - 169.254.169.254/32
+        {{- end }}
+    {{ if dig "networkPolicies" "controlPlaneNode" false .Values.bigbang }}
+    ports:
+    - port: {{ .Values.bigbang.networkPolicies.controlPlaneNode }}
+    {{- end -}}
+{{- end -}}

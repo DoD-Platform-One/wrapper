@@ -1,0 +1,39 @@
+{{- /* Sets up cookie for sticky sessions on service */ -}}
+{{- if and (dig "istio" "hosts" false .Values.package) .Values.bigbang.istio.enabled -}}
+{{- range $host := .Values.package.istio.hosts -}}
+{{- if $host.stickySessions -}}
+
+{{- /* Gather up all the possible service names */ -}}
+{{- $svcs := list -}}
+{{- range $route := compact (concat (default list $host.route.http) (default list $host.route.tcp) (default list $host.route.tls)) -}}
+{{- range $dest := $route.route -}}
+{{- $svcs = append $svcs (dig "destination" "host" nil $dest) -}}
+{{- end -}}
+{{- end -}}
+{{- $svcs = compact (uniq $svcs) -}}
+{{- /* Add a default if there isn't any */ -}}
+{{- if not $svcs -}}
+{{- $svcs = list (default $.Values.package.name (dig "destination" "service" nil $host)) -}}
+{{- end -}}
+
+{{- range $i, $svc := $svcs -}}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ include "resourceName" (printf "%s-stickysession%s" $.Values.package.name (ternary "" (print "-%" $i) (eq 1 (len $svcs)))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  host: {{ $svc }}
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        # Use session cookie for affinity
+        httpCookie:
+          name: StickySession
+          ttl: 300m
+---
+{{ end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,24 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "allowDnsEgress" true .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-dns" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows egress traffic from any pod to in-cluster DNS services
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - port: 53
+      protocol: UDP
+    {{- if .Values.bigbang.openshift }}
+    - port: 5353
+      protocol: UDP
+    {{- end -}}
+{{- end -}}

@@ -1,0 +1,34 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "allowNodeIngress" false .Values.package) -}}
+{{- $ingresses := dig "network" "allowNodeIngress" list .Values.package -}}
+{{- range $i, $ingress := $ingresses -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s%s" (default (printf "%s-node" $.Values.package.name) $ingress.name) (ternary "" (print "-%" $i) (or (not (empty $ingress.name)) (eq 1 (len $ingresses))))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows ingress traffic from IPs in the node CIDR to select pods on specified ports
+spec:
+  podSelector:
+  {{- toYaml (dig "selector" dict $ingress) | nindent 4 }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+  {{- if dig "networkPolicies" "nodeCidr" false $.Values.bigbang }}
+    - ipBlock:
+        cidr: {{ .Values.bigbang.networkPolicies.nodeCidr }}
+  {{- else -}}
+    {{- range tuple "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" "100.64.0.0/10" }}
+    - ipBlock:
+        cidr: {{ . }}
+    {{- end -}}
+  {{- end -}}
+  {{- if $ingress.ports -}}
+    ports:
+    {{- toYaml $ingress.ports | nindent 4 -}}
+  {{- end }}
+---
+{{ end -}}
+{{- end -}}

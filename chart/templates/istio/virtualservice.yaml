@@ -1,0 +1,34 @@
+{{- /* Sets up virtual service for istio ingress */ -}}
+{{- if and (dig "istio" "hosts" false .Values.package) .Values.bigbang.istio.enabled -}}
+{{- range $host := .Values.package.istio.hosts -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "resourceName" (printf "%s-%s" (index $host.names 0) (default $.Values.bigbang.domain $host.domain)) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  gateways:
+  {{- range $host.gateways }}
+  - {{ ternary . (printf "istio-system/%s" .) (contains "/" .) }}
+  {{- end }}
+  hosts:
+  {{- range $host.names }}
+  - {{ printf "%s.%s" . (default $.Values.bigbang.domain $host.domain) | quote }}
+  {{- end -}}
+
+  {{- /* Sets up default or simple route */ -}}
+  {{- if or $host.destination (not (or (dig "route" "http" false $host) (dig "route" "tcp" false $host) (dig "route" "tls" false $host))) -}}
+  {{- $dest := dict "host" (default $.Values.package.name (dig "destination" "service" nil $host)) -}}
+  {{- if dig "destination" "port" false $host -}}
+  {{- $dest = merge (dict "port" (dict "number" $host.destination.port)) $dest -}}
+  {{- end -}}
+  {{- $host = merge (dict "route" (dict "http" (append (dig "route" "http" list $host) (dict "route" (list (dict "destination" $dest)))))) $host -}}
+  {{- end -}}
+
+  {{- toYaml $host.route | nindent 2 }}
+  exportTo:
+  - istio-system
+---
+{{ end -}}
+{{- end -}}

@@ -1,0 +1,12 @@
+{{- $alerts := dig "monitor" "alerts" false .Values.package -}}
+{{- if and (dig "monitoring" "enabled" false .Values.bigbang) $alerts -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "resourceName" .Values.package.name }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  groups:
+  {{- toYaml $alerts | nindent 2 -}}
+{{- end -}}

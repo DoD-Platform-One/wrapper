@@ -1,0 +1,22 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "allowHttpsEgress" false .Values.package) -}}
+{{- $egresses := dig "network" "allowHttpsEgress" list .Values.package -}}
+{{- range $i, $egress := $egresses -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s%s" (default (printf "%s-https" $.Values.package.name) $egress.name) (ternary "" (print "-%" $i) (or (not (empty $egress.name)) (eq 1 (len $egresses))))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows egress traffic from select pods to the https port outside of the cluster
+spec:
+  podSelector:
+  {{- toYaml (dig "selector" dict $egress) | nindent 4 }}
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - port: 443
+---
+{{ end -}}
+{{- end -}}

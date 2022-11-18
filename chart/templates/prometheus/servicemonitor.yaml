@@ -1,0 +1,38 @@
+{{- $services := dig "monitor" "services" false .Values.package -}}
+{{- if and (dig "monitoring" "enabled" false .Values.bigbang) $services -}}
+{{- range $i, $service := $services -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "resourceName" (printf "%s%s" (default $.Values.package.name $service.name) (ternary "" (print "-%" $i) (or (not (empty $service.name)) (eq 1 (len $services))))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  {{- if and (not (dig "spec" "namespaceSelector" false $service)) (dig "namespace" "name" nil $.Values.package) }}
+  namespaceSelector:
+    matchNames:
+    - {{ $.Values.package.namespace.name }}
+  {{- end -}}
+  {{- if and (not (dig "spec" "selector" false $service)) ($.Values.package.name) }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "resourceName" $.Values.package.name }}
+  {{- end -}}
+  {{- if and (dig "istio" "injection" true $.Values.package) (dig "monitor" "encryptedMetrics" true $.Values.package) -}}
+    {{- range $key, $value := $service.spec -}}
+      {{- $key | nindent 2 -}}:
+      {{- if eq $key "endpoints" -}}
+        {{- $mTLS := dict "scheme" "https" "tlsConfig" (dict "caFile" "/etc/prom-certs/root-cert.pem" "certFile" "/etc/prom-certs/cert-chain.pem" "keyFile" "/etc/prom-certs/key.pem" "insecureSkipVerify" true) -}}
+        {{- range $endpoint := $value }}
+          {{- toYaml (list (merge $mTLS $endpoint)) | nindent 2 -}}
+        {{- end -}}
+      {{- else -}}
+        {{- toYaml $value | nindent 4 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- toYaml $service.spec | nindent 2 -}}
+  {{- end }}
+---
+{{ end -}}
+{{- end -}}

@@ -1,0 +1,14 @@
+{{- if and .Values.bigbang.istio.enabled (dig "istio" "injection" true .Values.package) -}}
+{{- $peerAuths := default (list (dict "spec" (dict "mtls" (dict "mode" "STRICT")))) (dig "istio" "peerAuthentications" list .Values.package) -}}
+{{- range $i, $peerAuth := $peerAuths -}}
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: {{ include "resourceName" (printf "%s%s" (default $.Values.package.name $peerAuth.name) (ternary "" (print "-%" $i) (eq 1 (len $peerAuths)))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  {{- toYaml $peerAuth.spec | nindent 2 }}
+---
+{{ end -}}
+{{- end -}}

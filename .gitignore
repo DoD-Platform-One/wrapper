@@ -33,4 +33,6 @@ ignore/*
 # Local History for Visual Studio Code
 .history/
 
-
+# Helm docs
+.helmdocsignore
+*.gotmpl

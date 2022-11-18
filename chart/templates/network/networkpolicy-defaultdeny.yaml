@@ -1,0 +1,17 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) (dig "network" "defaultDeny" true .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-defaultdeny" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: By default, deny all ingress and egress traffic in the namespace
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  - Ingress
+  egress: []
+  ingress: []
+{{- end -}}

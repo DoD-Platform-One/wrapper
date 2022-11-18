@@ -1,0 +1,32 @@
+{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled (dig "network" "policies" true .Values.package) (dig "istio" "hosts" false .Values.package) -}}
+{{- $pkg := include "resourceName" .Values.package.name -}}
+{{- /* Add default selector if it isn't there */ -}}
+{{- $defSel := (dict "selectors" (list (dict "matchLabels" (dict "app.kubernetes.io/name" $pkg)))) -}}
+{{- range $host := .Values.package.istio.hosts -}}
+{{- $host = merge $host $defSel  -}}
+{{- range $i, $selector := $host.selectors -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-gateway%s" $pkg (ternary "" (print "-%" $i) (eq 1 (len $host.selectors)))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows ingress traffic from any Istio ingress gateway to exposed ports
+spec:
+  podSelector:
+    {{- toYaml $selector | nindent 4 }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: istio-controlplane
+      podSelector:
+        matchLabels:
+          istio: ingressgateway
+    {{- include "exposedPorts" $host | nindent 4 -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

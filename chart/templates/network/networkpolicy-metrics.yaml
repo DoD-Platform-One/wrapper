@@ -1,0 +1,32 @@
+{{- if and .Values.bigbang.networkPolicies.enabled (dig "network" "policies" true .Values.package) .Values.bigbang.monitoring.enabled -}}
+{{- $services := dig "services" list .Values.package.monitor -}}
+{{- $defSel := (dict "spec" (dict "selector" (list (dict "matchLabels" (dict "app.kubernetes.io/name" (include "resourceName" .Values.package.name)))))) -}}
+{{- range $i, $service := $services -}}
+{{- /* Add default selector if it isn't there */ -}}
+{{- if not (dig "spec" "selector" false $service) -}}
+{{- $service = merge $service $defSel -}}
+{{- end -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-metrics%s" (default $.Values.package.name $service.name) (ternary "" (print "-%" $i) (or (not (empty $service.name)) (eq 1 (len $services))))) }}
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: Allows ingress traffic from Prometheus to select pods for metrics scraping.
+spec:
+  podSelector:
+  {{- toYaml (dig "spec" "selector" dict $service) | nindent 2 }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+---
+{{ end -}}
+{{- end -}}

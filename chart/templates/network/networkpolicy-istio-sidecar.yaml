@@ -1,0 +1,51 @@
+{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled (dig "network" "policies" true .Values.package) (dig "istio" "injection" true .Values.package) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resourceName" (printf "%s-istio-sidecar" .Values.package.name) }}
+  labels:
+    {{- include "commonLabels" . | nindent 4 }}
+  annotations:
+    bigbang.dso.mil/description: |-
+      Allows ingress traffic from Prometheus to the Istio sidecar metrics.
+      Allows egress traffic from the Istio sidecar to the Istio daemon and Tempo (if enabled).
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  {{- if .Values.bigbang.monitoring.enabled }}
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - port: 15020
+  {{- end }}
+  egress:
+  - ports:
+    - port: 15012
+    to:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: istio-controlplane
+      podSelector:
+        matchLabels:
+          istio: pilot
+  {{- if .Values.bigbang.tempo.enabled -}}
+  # Each sidecar sends zipkin trace info directly to tempo
+  - ports:
+    - port: 9411
+    to:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: tempo
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: tempo
+  {{- end -}}
+{{- end -}}
