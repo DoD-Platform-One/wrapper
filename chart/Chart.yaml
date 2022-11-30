@@ -1,6 +1,6 @@
 apiVersion: v2
 name: bigbang-wrapper
-version: 0.0.0
+version: 0.0.2
 description: Adds full Big Bang integration into a package
 sources:
   - https://repo1.dso.mil/platform-one/big-bang/apps/wrapper
