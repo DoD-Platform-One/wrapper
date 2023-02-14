@@ -1,12 +1,12 @@
-# bigbang-wrapper
+# wrapper
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Adds full Big Bang integration into a package
 
 ## Upstream References
 
-* <https://repo1.dso.mil/platform-one/big-bang/apps/wrapper>
+* <https://repo1.dso.mil/big-bang/product/packages/wrapper>
 
 ## Learn More
 * [Application Overview](docs/overview.md)
