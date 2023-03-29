@@ -129,7 +129,8 @@ package:
   #   data: {}
 
   sso:
-    # -- Toggle AuthService SSO for package; Chain must be setup in Authservice for this to work
+    # -- Toggle AuthService SSO for package; Chain must be setup in Authservice & workload 
+    # must be appropriately labeled for this to work
     enabled: false
 
   # -- Pass through values to this package's upstream Helm chart

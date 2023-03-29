@@ -1,6 +1,6 @@
 # wrapper
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Adds full Big Bang integration into a package
 
@@ -27,7 +27,7 @@ https://helm.sh/docs/intro/install/
 * Clone down the repository
 * cd into directory
 ```bash
-helm install bigbang-wrapper chart/
+helm install wrapper chart/
 ```
 
 ## Values
@@ -51,7 +51,7 @@ helm install bigbang-wrapper chart/
 | package.network.additionalPolicies | list | `[]` | Custom egress/ingress policies to deploy.  [More info](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#networkpolicy-v1-networking-k8s-io) |
 | package.secrets | object | `{}` | Secrets that should be created prior to Helm install |
 | package.configMaps | object | `{}` | ConfigMaps that should be created prior to Helm install |
-| package.sso.enabled | bool | `false` | Toggle AuthService SSO for package; Chain must be setup in Authservice for this to work |
+| package.sso.enabled | bool | `false` | Toggle AuthService SSO for package; Chain must be setup in Authservice & workload  must be appropriately labeled for this to work |
 | package.values | object | `{}` | Pass through values to this package's upstream Helm chart |
 
 ## Contributing
