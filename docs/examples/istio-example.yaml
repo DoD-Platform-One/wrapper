@@ -1,0 +1,35 @@
+wrapper:
+  git:
+    repo: "https://repo1.dso.mil/big-bang/product/packages/wrapper.git"
+    path: "chart"
+    tag: "0.2.1"
+
+packages:
+  podinfo:
+    enabled: true
+    git:
+      repo: https://github.com/stefanprodan/podinfo.git
+      tag: 6.3.4
+      path: charts/podinfo
+    wrapper:
+      enabled: true
+    istio:
+      injection: true
+      peerAuthentications:
+        - name: "podinfo"
+          spec:
+            selector:
+              matchLabels:
+                app: "podinfo"
+            mtls:
+              mode: STRICT
+            portLevelMtls:
+              9898:
+                mode: STRICT
+      hosts:
+      - names:
+          - podinfo
+        gateways:
+          - public
+        destination:
+          port: 9898
