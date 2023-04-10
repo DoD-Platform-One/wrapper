@@ -86,9 +86,16 @@ package:
     #   # @default -- if not specified, `namespaceSelector` is set to the package namespace and `selector` is set to match `app.kubernetes.io/name: <package name>`
     #   spec: {}
 
-    alerts:
+    # -- Prometheus alerting rules, list of Prometheus [RuleGroups](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.RuleGroup)
+    alerts: 
 
+    # -- Custom Grafana dashboards. Each dashboard is specified with a unique name key and dashboard contents value. 
+    # Dashboard contents are a key-value pair where key is dashboard format ("json") and value is dashboard contents. 
+    # Adds to existing bigbang grafana configuration, so no provider required, but otherwise follows Grafana conventions. [More Info](https://github.com/grafana/helm-charts/blob/grafana-6.52.9/charts/grafana/values.yaml#L649-L659)
     dashboards: {}
+    #   inline-json-dashboard-name:
+    #     json: |
+    #       $RAW_JSON
 
   network:
     # -- Toggle all policies on or off

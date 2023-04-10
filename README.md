@@ -1,6 +1,6 @@
 # wrapper
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Adds full Big Bang integration into a package
 
@@ -42,6 +42,8 @@ helm install wrapper chart/
 | package.istio.peerAuthentications | list | If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace. | Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/). |
 | package.monitor.encryptedMetrics | bool | `true` | Toggle automatic setup of encrypted metrics via https.  Requires Istio injection.  Strict mTLS relies on this being enabled. |
 | package.monitor.services | list | `[]` | Services to monitor using Prometheus.  Each service is specified as `name: "", [spec: {}](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitorSpec)` |
+| package.monitor.alerts | string | `nil` | Prometheus alerting rules, list of Prometheus [RuleGroups](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.RuleGroup) |
+| package.monitor.dashboards | object | `{}` | Custom Grafana dashboards. Each dashboard is specified with a unique name key and dashboard contents value.  Dashboard contents are a key-value pair where key is dashboard format ("json") and value is dashboard contents.  Adds to existing bigbang grafana configuration, so no provider required, but otherwise follows Grafana conventions. [More Info](https://github.com/grafana/helm-charts/blob/grafana-6.52.9/charts/grafana/values.yaml#L649-L659) |
 | package.network.policies | bool | `true` | Toggle all policies on or off |
 | package.network.defaultDeny | bool | `true` | Deny all traffic in the namespace by default |
 | package.network.allowIntraNamespace | bool | `true` | Allow traffic between pods inside the namespace |
