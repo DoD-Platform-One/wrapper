@@ -1,0 +1,21 @@
+{{- $dashboards := dig "monitor" "dashboards" false .Values.package -}}
+{{- if and (dig "monitoring" "enabled" false .Values.bigbang) $dashboards -}}
+{{- range $name, $dashboard := $dashboards }}
+{{- if hasKey $dashboard "json" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "resourceName" (printf "%s-%s" $.Values.package.name $name) | trunc 63 | trimSuffix "-" }}
+  namespace: monitoring
+  labels:
+    {{- include "commonLabels" $ | nindent 4 }}
+    grafana_dashboard: "1"
+data:
+  {{- print $name | nindent 2 }}.json:
+    |-
+      {{- $dashboard.json | nindent 6 }}
+---
+{{- end }}
+{{- end }}
+
+{{- end }}
