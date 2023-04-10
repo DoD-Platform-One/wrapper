@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [0.3.0] - 2023-04-07
+### Changed
+- Changed istio.injection value to be a string enabled/disabled for consistency
+
 ## [0.2.1] - 2023-03-29
 ### Changed
 - SSO comment updated for clarity

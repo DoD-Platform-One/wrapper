@@ -1,4 +1,4 @@
-{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled (dig "network" "policies" true .Values.package) (dig "istio" "injection" true .Values.package) -}}
+{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled (dig "network" "policies" true .Values.package) (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

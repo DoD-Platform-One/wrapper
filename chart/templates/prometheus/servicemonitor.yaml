@@ -18,7 +18,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "resourceName" $.Values.package.name }}
   {{- end -}}
-  {{- if and (dig "istio" "injection" true $.Values.package) (dig "monitor" "encryptedMetrics" true $.Values.package) -}}
+  {{- if and (eq (dig "istio" "injection" "enabled" $.Values.package) "enabled") (dig "monitor" "encryptedMetrics" true $.Values.package) -}}
     {{- range $key, $value := $service.spec -}}
       {{- $key | nindent 2 -}}:
       {{- if eq $key "endpoints" -}}
