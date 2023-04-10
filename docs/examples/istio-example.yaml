@@ -14,7 +14,7 @@ packages:
     wrapper:
       enabled: true
     istio:
-      injection: true
+      injection: "enabled"
       peerAuthentications:
         - name: "podinfo"
           spec:

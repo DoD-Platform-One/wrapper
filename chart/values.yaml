@@ -29,8 +29,8 @@ package:
     name:
 
   istio:
-    # -- Toggles sidecar injection into the package.  Enabling this allows [mTLS](https://en.wikipedia.org/wiki/Mutual_authentication#mTLS).
-    injection: true
+    # -- Toggles sidecar injection into the package.  Enabling this allows [mTLS](https://en.wikipedia.org/wiki/Mutual_authentication#mTLS). Options are "enabled" or "disabled".
+    injection: "enabled"
     # -- Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/).
     # @default -- If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace.
     peerAuthentications: []
