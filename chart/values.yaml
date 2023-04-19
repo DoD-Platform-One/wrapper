@@ -120,7 +120,7 @@ package:
     #   spec: {} # See Network Policy spec
 
   # -- Secrets that should be created prior to Helm install
-  secrets: {}
+  secrets: []
   #   # -- Name of secret to create
   # - name:
   #   # -- Type of secret
@@ -129,7 +129,7 @@ package:
   #   data: {}
 
   # -- ConfigMaps that should be created prior to Helm install
-  configMaps: {}
+  configMaps: []
   #   # -- Name of configMap to create
   # - name:
   #   # -- Data to include in configMap.  Can include helm template syntax.

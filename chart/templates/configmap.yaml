@@ -11,5 +11,6 @@ data:
   {{- tpl $cm.data $ | nindent 2 -}}
   {{- else -}}
   {{- tpl (toYaml $cm.data) $ | nindent 2 -}}
-  {{- end -}}
+  {{- end }}
+---  
 {{- end -}}
