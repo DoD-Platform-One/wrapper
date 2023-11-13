@@ -1,6 +1,6 @@
 # wrapper
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Adds full Big Bang integration into a package
 
@@ -35,11 +35,11 @@ helm install wrapper chart/
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | bigbang | object | `{"addons":{"authservice":{"enabled":false,"values":{"selector":{"key":"protect","value":"keycloak"}}}},"domain":"bigbang.dev","istio":{"enabled":false},"monitoring":{"enabled":false},"networkPolicies":{"controlPlaneCidr":"0.0.0.0/0","controlPlaneNode":null,"enabled":false},"openshift":false}` | Passdown values from Big Bang |
-| package | object | `{"configMaps":[],"istio":{"hosts":[],"injection":"enabled","peerAuthentications":[]},"monitor":{"alerts":null,"dashboards":{},"encryptedMetrics":true,"services":[]},"name":"","namespace":{"name":null},"network":{"additionalPolicies":[],"allowControlPlaneEgress":false,"allowDnsEgress":true,"allowHttpsEgress":[],"allowIntraNamespace":true,"defaultDeny":true,"policies":true},"secrets":[],"sso":{"enabled":false},"values":{}}` | Passdown values from package |
+| package | object | `{"configMaps":[],"istio":{"hardened":{"customAuthorizationPolicies":[],"enabled":false,"matchLabels":{}},"hosts":[],"injection":"enabled","peerAuthentications":[]},"monitor":{"alerts":null,"dashboards":{},"encryptedMetrics":true,"services":[]},"name":"","namespace":{"name":null},"network":{"additionalPolicies":[],"allowControlPlaneEgress":false,"allowDnsEgress":true,"allowHttpsEgress":[],"allowIntraNamespace":true,"defaultDeny":true,"policies":true},"secrets":[],"sso":{"enabled":false},"values":{}}` | Passdown values from package |
 | package.name | Required | `""` | Name of the package |
 | package.namespace.name | string | Same as package.name | Name of the namespace.  Defaults to the same name as the package. |
 | package.istio.injection | string | `"enabled"` | Toggles sidecar injection into the package.  Enabling this allows [mTLS](https://en.wikipedia.org/wiki/Mutual_authentication#mTLS). Options are "enabled" or "disabled". |
-| package.istio.peerAuthentications | list | If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace. | Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/). |
+| package.istio.hardened | object | If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace. | Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/). |
 | package.monitor.encryptedMetrics | bool | `true` | Toggle automatic setup of encrypted metrics via https.  Requires Istio injection.  Strict mTLS relies on this being enabled. |
 | package.monitor.services | list | `[]` | Services to monitor using Prometheus.  Each service is specified as `name: "", [spec: {}](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitorSpec)` |
 | package.monitor.alerts | string | `nil` | Prometheus alerting rules, list of Prometheus [RuleGroups](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.RuleGroup) |

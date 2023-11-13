@@ -1,0 +1,16 @@
+{{- /* Render Istio Auth policies */ -}}
+{{- if and .Values.bigbang.istio.enabled (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") $.Values.package.istio.hardened.enabled -}}
+{{- range $.Values.package.istio.hardened.customAuthorizationPolicies -}}
+{{- if .enabled -}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Release.Namespace }}
+
+spec:
+  {{- toYaml .spec | nindent 2 }}
+---
+{{ end -}}
+{{ end -}}
+{{- end -}}
