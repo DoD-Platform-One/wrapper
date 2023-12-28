@@ -27,6 +27,7 @@ spec:
         matchLabels:
           istio: ingressgateway
     {{- include "exposedPorts" $host | nindent 4 -}}
+---
 {{- end -}}
 {{- end -}}
 {{- end -}}
