@@ -2,6 +2,7 @@
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $matchLabels := .Values.package.istio.hardened.matchLabels -}}
 {{- range .Values.package.istio.hosts -}}
+{{- $host := . -}}
 {{- if hasKey . "gateways" -}}
 {{- range .gateways -}}
 {{- $namespace := "istio-system" -}}
@@ -11,10 +12,16 @@
 {{- $namespace = $gatewayParts._0 -}}
 {{- $name := $gatewayParts._1 -}}
 {{- end -}}
+{{- $extraName := "" -}}
+{{- range $currentName := $host.names -}}
+{{- if $currentName -}}
+{{- $extraName = printf "%s-%s" $extraName $currentName -}}
+{{- end -}}
+{{- end -}}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: {{ $name }}-ingressgateway-authz-policy
+  name: {{ printf "%s-ingressgateway%s-authz-policy" $name $extraName }}
   namespace: {{ $releaseNamespace }}
 spec:
   selector:

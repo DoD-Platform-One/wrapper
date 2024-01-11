@@ -5,10 +5,16 @@
 {{- range $host := .Values.package.istio.hosts -}}
 {{- $host = merge $host $defSel  -}}
 {{- range $i, $selector := $host.selectors -}}
+{{- $extraName := "" -}}
+{{- range $name := $host.names -}}
+{{- if $name -}}
+{{- $extraName = printf "%s-%s" $extraName $name -}}
+{{- end -}}
+{{- end -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "resourceName" (printf "%s-gateway%s" $pkg (ternary "" (print "-%" $i) (eq 1 (len $host.selectors)))) }}
+  name: {{ include "resourceName" (printf "%s-gateway%s%s" $pkg $extraName (ternary "" (printf "-%s" $i) (eq 1 (len $host.selectors)))) }}
   labels:
     {{- include "commonLabels" $ | nindent 4 }}
   annotations:
@@ -26,8 +32,8 @@ spec:
       podSelector:
         matchLabels:
           istio: ingressgateway
-    {{- include "exposedPorts" $host | nindent 4 -}}
+    {{- include "exposedPorts" $host | nindent 4 }}
 ---
-{{- end -}}
+{{ end -}}
 {{- end -}}
 {{- end -}}
