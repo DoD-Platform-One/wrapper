@@ -36,8 +36,8 @@ spec:
       podSelector:
         matchLabels:
           istio: pilot
-  {{- if .Values.bigbang.tempo.enabled }}
-  # Each sidecar sends zipkin trace info directly to tempo
+  {{ if dig "tempo" "enabled" true .Values.bigbang -}}
+  {{- /* Each sidecar sends zipkin trace info directly to tempo */ -}}
   - ports:
     - port: 9411
     to:
