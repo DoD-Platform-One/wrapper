@@ -25,6 +25,37 @@ wrapper:
 
 Don't forget to add network and authorization policies if you need other packages to be able to reach your custom software.
 
+### Kyverno Policies
+
+You may need to add exclusions to kyverno policies for your packages. You'll know if you get Kyverno `events` that reference your resources. Here is an example to allow automounting of service tokens.
+
+```yaml
+kyvernoPolicies:
+  values:
+    policies:
+      disallow-auto-mount-service-account-token:
+        exclude:
+          any:
+            # allows my-app to mount service account tokens
+            - resources:
+                namespaces:
+                - my-app
+                kinds:
+                - Pod
+                names:
+                - my-app-*
+```
+
+Here is a script that you can use to find kyverno issues.
+
+```bash
+app_name="my-app"
+namespace="$app_name"
+event_reason="Policy"
+irrelevant_action="Resource Passed"
+kubectl get event -A -o json | jq '[.items[] | select( (.reason | contains("'$event_reason'")) and ( (.message | contains("'$app_name'")) or (.related != null and (.related.namespace != null and (.related.namespace | contains("'$namespace'"))) or (.related.name != null and (.related.name | contains("'$app_name'"))) ) ) and (.action != "'$irrelevant_action'") )]'
+```
+
 ## Examples
 
 Here are some examples of good, bad and otherwise.
