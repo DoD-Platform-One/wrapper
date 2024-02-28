@@ -13,8 +13,14 @@ spec:
   - {{ ternary . (printf "istio-system/%s" .) (contains "/" .) }}
   {{- end }}
   hosts:
-  {{- range $host.names }}
-  - {{ printf "%s.%s" . (default $.Values.bigbang.domain $host.domain) | quote }}
+  {{- range $hostName := $host.names }}
+  {{- if gt (len (default list $host.domains)) 0 }}
+  {{- range $hostDomain := $host.domains }}
+  - {{ printf "%s.%s" $hostName $hostDomain | quote }}
+  {{- end -}}
+  {{- else }}
+  - {{ printf "%s.%s" $hostName $.Values.bigbang.domain | quote }}
+  {{- end -}}
   {{- end -}}
 
   {{- /* Sets up default or simple route */ -}}
