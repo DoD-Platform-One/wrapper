@@ -1,4 +1,4 @@
-# How to upgrade the Fortify Package chart
+# How to upgrade the Wrapper Package chart
 
 This is a custom package, there is no upstream to upgrade from. This document will contain notes and examples to help use/understand how to use the wrapper.
 
