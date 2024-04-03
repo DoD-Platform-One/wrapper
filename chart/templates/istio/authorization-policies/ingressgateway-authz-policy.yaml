@@ -24,9 +24,11 @@ metadata:
   name: {{ printf "%s-ingressgateway%s-authz-policy" $name $extraName }}
   namespace: {{ $releaseNamespace }}
 spec:
+  {{- if $matchLabels }}
   selector:
     matchLabels:
       {{ $matchLabels | toYaml | nindent 6 }}
+  {{- end }}
   action: ALLOW
   rules:
   - from:
