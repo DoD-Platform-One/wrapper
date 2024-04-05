@@ -9,6 +9,7 @@ Adds full Big Bang integration into a package
 * <https://repo1.dso.mil/big-bang/product/packages/wrapper>
 
 ## Learn More
+* [Introduction](docs/custom-packages-wrapper.md)
 * [Application Overview](docs/overview.md)
 * [Other Documentation](docs/)
 
