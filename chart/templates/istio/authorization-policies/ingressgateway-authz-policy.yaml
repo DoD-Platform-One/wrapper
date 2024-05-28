@@ -10,7 +10,7 @@
 {{- if contains "/" $name -}}
 {{- $gatewayParts := split "/" $name }}
 {{- $namespace = $gatewayParts._0 -}}
-{{- $name := $gatewayParts._1 -}}
+{{- $name = $gatewayParts._1 -}}
 {{- end -}}
 {{- $extraName := "" -}}
 {{- range $currentName := $host.names -}}
