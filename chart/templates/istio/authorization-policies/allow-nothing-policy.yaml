@@ -1,9 +1,0 @@
-{{- /* the allow-nothing policy should eventually be provided by istio itself cluster-wide */ -}}
-{{- if and .Values.bigbang.istio.enabled (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") .Values.package.istio.hardened.enabled -}}
-apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-nothing-policy
-  namespace: {{ .Release.Namespace }}
-spec: {}
-{{- end }}
