@@ -9,6 +9,7 @@ Adds full Big Bang integration into a package
 * <https://repo1.dso.mil/big-bang/product/packages/wrapper>
 
 ## Learn More
+
 * [Application Overview](docs/overview.md)
 * [Other Documentation](docs/)
 
@@ -20,12 +21,13 @@ Adds full Big Bang integration into a package
 
 Install Helm
 
-https://helm.sh/docs/intro/install/
+<https://helm.sh/docs/intro/install/>
 
 ## Deployment
 
 * Clone down the repository
 * cd into directory
+
 ```bash
 helm install wrapper chart/
 ```
