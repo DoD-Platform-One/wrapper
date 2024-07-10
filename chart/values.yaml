@@ -8,6 +8,8 @@ bigbang:
     controlPlaneNode:
   istio:
     enabled: false
+    hardened:
+      enabled: false
   monitoring:
     enabled: false
   addons:
@@ -34,7 +36,7 @@ package:
     # -- Add policies to enforce traffic encryption (mTLS) through Istio sidecars.  [More info](https://istio.io/latest/docs/reference/config/security/peer_authentication/).
     # @default -- If sidecar injection is enabled and peerAuthentication is blank, mTLS will be set to strict mode for the namespace.
     hardened:
-      enabled: false
+      enabled: "{{ .Values.bigbang.istio.values.hardened.enabled }}"
       matchLabels: {}
       # - app.kubernetes.io/name: example
       customAuthorizationPolicies: []
