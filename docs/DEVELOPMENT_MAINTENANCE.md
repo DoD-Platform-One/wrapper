@@ -10,6 +10,11 @@ The wrapper is a helm chart to add standard BB resources to custom charts, e.g. 
 
 BB provides a platform for software, but realistically end users want to run their software, not just a platform. This wrapper is the standard solution to incorporate any software the end user wants to run into the BB platform with minimal customizations to get it to work.
 
+## Files That Require Integration Testing
+
+Currently, this package does not undergo any sort of integration testing. There is an [open issue in Big Bang](https://repo1.dso.mil/big-bang/bigbang/-/issues/2263) to assess the need for 
+expanding test coverage. This section should be updated as that ticket progresses.
+
 ## Gotchas
 
 It's relatively difficult to deploy/test outside of using BB. Use `helm template chart` to test syntax and lint, then just commit push and test with BB with an override as shown here:
