@@ -5,3 +5,5 @@ description: Adds full Big Bang integration into a package
 sources:
   - https://repo1.dso.mil/big-bang/product/packages/wrapper
 type: application
+annotations:
+  bigbang.dev/maintenanceTrack: bb_integrated
