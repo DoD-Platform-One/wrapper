@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Changed the default istio hardening state to istio's default
+- Added the maintenance track annotation and badge
 
 ## [0.4.9] - 2024-06-20
 
