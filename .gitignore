@@ -36,3 +36,9 @@ ignore/*
 # Helm docs
 .helmdocsignore
 *.gotmpl
+
+# Cypress
+node_modules/
+screenshots/
+videos/
+**/cypress/downloads

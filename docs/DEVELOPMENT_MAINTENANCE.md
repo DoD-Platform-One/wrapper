@@ -12,8 +12,9 @@ BB provides a platform for software, but realistically end users want to run the
 
 ## Files That Require Integration Testing
 
-Currently, this package does not undergo any sort of integration testing. There is an [open issue in Big Bang](https://repo1.dso.mil/big-bang/bigbang/-/issues/2263) to assess the need for 
-expanding test coverage. This section should be updated as that ticket progresses.
+Cypress tests are included for the wrapper chart that will install [podinfo](https://repo1.dso.mil/big-bang/apps/sandbox/podinfo) using the wrapper and create a dashboard in Grafana. These tests show how wrapper can be used to integrate any external application into a cluster where Big Bang is deployed.
+
+To run the tests, apply the `tests/podinfo-values.yaml` override file when installing or updating Big Bang. This will deploy the wrapped podinfo application. Once the installation is complete and the podinfo app is running in the cluster, you can run the cypress tests. Change your directory to `chart/tests` and run the command `npx cypress run --project=./ --browser=chrome` or adjust the project parameter to run from another directory.
 
 ## Gotchas
 
