@@ -38,6 +38,7 @@ packages:
             cypress_grafana_username: "admin"
             cypress_grafana_password: "prom-operator"
     istio:
+      enabled: true
       hosts:
         - names:
             - podinfo

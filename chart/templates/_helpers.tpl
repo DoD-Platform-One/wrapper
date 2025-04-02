@@ -31,3 +31,21 @@ ports:
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{- /* Returns name of istio Namespace Selector*/ -}}
+{{- define "istioNamespaceSelectorIngress" -}}
+{{- if .Values.bigbang.istioCore.enabled -}}
+istio-gateway
+{{- else -}}
+istio-controlplane
+{{- end -}}
+{{- end -}}
+
+{{- /* Returns name of istio Namespace Selector*/ -}}
+{{- define "istioNamespaceSelectorEgress" -}}
+{{- if .Values.bigbang.istioCore.enabled -}}
+istio-core
+{{- else -}}
+istio-controlplane
+{{- end -}}
+{{- end -}}
