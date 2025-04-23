@@ -1,11 +1,11 @@
-{{- if and .Values.bigbang.istio.enabled (hasKey .Values.package "istio") (hasKey .Values.package.istio "hardened") (eq (dig "injection" "enabled" .Values.package.istio) "enabled") (dig  "enabled" false .Values.package.istio.hardened) (hasKey .Values.package.istio.hardened "matchLabels") -}}
+{{- if and (eq (include "istioEnabled" .) "true") (hasKey .Values.package "istio") (hasKey .Values.package.istio "hardened") (eq (dig "injection" "enabled" .Values.package.istio) "enabled") (dig  "enabled" false .Values.package.istio.hardened) (hasKey .Values.package.istio.hardened "matchLabels") -}}
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $matchLabels := .Values.package.istio.hardened.matchLabels -}}
 {{- range .Values.package.istio.hosts -}}
 {{- $host := . -}}
 {{- if hasKey . "gateways" -}}
 {{- range .gateways -}}
-{{- $namespace := "istio-system" -}}
+{{- $namespace := ternary "istio-gateway" "istio-system" $.Values.bigbang.istiod.enabled -}}
 {{- $name := . -}}
 {{- if contains "/" $name -}}
 {{- $gatewayParts := split "/" $name }}
