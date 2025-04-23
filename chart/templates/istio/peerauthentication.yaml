@@ -1,4 +1,4 @@
-{{- if and .Values.bigbang.istio.enabled (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") -}}
+{{- if and (eq (include "istioEnabled" .) "true") (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") -}}
 {{- $peerAuths := default (list (dict "spec" (dict "mtls" (dict "mode" "STRICT")))) (dig "istio" "peerAuthentications" list .Values.package) -}}
 {{- range $i, $peerAuth := $peerAuths -}}
 apiVersion: security.istio.io/v1beta1

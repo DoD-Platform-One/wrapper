@@ -30,6 +30,6 @@ packages:
       - names:
           - podinfo
         gateways:
-          - public
+          - "public-ingressgateway"
         destination:
           port: 9898

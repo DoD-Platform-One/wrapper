@@ -32,9 +32,14 @@ ports:
 {{- end -}}
 {{- end -}}
 
+{{- /* Returns true if either istio or istiod is enabled */ -}}
+{{- define "istioEnabled" -}}
+{{ or .Values.bigbang.istio.enabled .Values.bigbang.istiod.enabled }}
+{{- end -}}
+
 {{- /* Returns name of istio Namespace Selector*/ -}}
 {{- define "istioNamespaceSelectorIngress" -}}
-{{- if .Values.bigbang.istioCore.enabled -}}
+{{- if .Values.bigbang.istiod.enabled -}}
 istio-gateway
 {{- else -}}
 istio-controlplane
@@ -43,7 +48,7 @@ istio-controlplane
 
 {{- /* Returns name of istio Namespace Selector*/ -}}
 {{- define "istioNamespaceSelectorEgress" -}}
-{{- if .Values.bigbang.istioCore.enabled -}}
+{{- if .Values.bigbang.istiod.enabled -}}
 istio-core
 {{- else -}}
 istio-controlplane

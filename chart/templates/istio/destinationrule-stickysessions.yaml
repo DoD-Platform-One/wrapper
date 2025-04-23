@@ -1,5 +1,5 @@
 {{- /* Sets up cookie for sticky sessions on service */ -}}
-{{- if and (dig "istio" "hosts" false .Values.package) .Values.bigbang.istio.enabled -}}
+{{- if and (dig "istio" "hosts" false .Values.package) (eq (include "istioEnabled" .) "true") -}}
 {{- range $host := .Values.package.istio.hosts -}}
 {{- if $host.stickySessions -}}
 

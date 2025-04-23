@@ -1,4 +1,4 @@
-{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled .Values.bigbang.addons.authservice.enabled (dig "network" "policies" true .Values.package) (dig "sso" "enabled" false .Values.package) -}}
+{{- if and .Values.bigbang.networkPolicies.enabled (eq (include "istioEnabled" .) "true") .Values.bigbang.addons.authservice.enabled (dig "network" "policies" true .Values.package) (dig "sso" "enabled" false .Values.package) -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

@@ -1,5 +1,5 @@
 {{- /* Sets up virtual service for istio ingress */ -}}
-{{- if and (dig "istio" "hosts" false .Values.package) .Values.bigbang.istio.enabled -}}
+{{- if and (dig "istio" "hosts" false .Values.package) (eq (include "istioEnabled" .) "true") -}}
 {{- range $host := .Values.package.istio.hosts -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -10,7 +10,7 @@ metadata:
 spec:
   gateways:
   {{- range $host.gateways }}
-  - {{ ternary . (printf "istio-system/%s" .) (contains "/" .) }}
+  - {{ ternary . (printf "%s/%s" (ternary "istio-gateway" "istio-system" $.Values.bigbang.istiod.enabled) .) (contains "/" .) }}
   {{- end }}
   hosts:
   {{- range $hostName := $host.names }}
@@ -34,7 +34,7 @@ spec:
 
   {{- toYaml $host.route | nindent 2 }}
   exportTo:
-  - istio-system
+  - {{ ternary "istio-gateway" "istio-system" $.Values.bigbang.istiod.enabled }}
 ---
 {{ end -}}
 {{- end -}}

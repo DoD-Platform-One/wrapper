@@ -1,4 +1,4 @@
-{{- if and .Values.bigbang.networkPolicies.enabled .Values.bigbang.istio.enabled (dig "network" "policies" true .Values.package) (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") -}}
+{{- if and .Values.bigbang.networkPolicies.enabled (eq (include "istioEnabled" .) "true") (dig "network" "policies" true .Values.package) (eq (dig "istio" "injection" "enabled" .Values.package) "enabled") -}}
 {{- $pkg := include "resourceName" .Values.package.name -}}
 {{- $ingressList := list (dig "networkPolicies" "istioNamespaceSelectorIngress" "ingress" false (.Values | merge (dict))) -}}
 {{- /* Add default selector if it isn't there */ -}}

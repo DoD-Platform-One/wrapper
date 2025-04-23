@@ -1,4 +1,4 @@
-{{- if and .Values.bigbang.istio.enabled (hasKey .Values.package "istio") (hasKey .Values.package.istio "hardened") (eq (dig "injection" "enabled" .Values.package.istio) "enabled") (dig  "enabled" false .Values.package.istio.hardened) (hasKey .Values.package.istio.hardened "matchLabels") -}}
+{{- if and (eq (include "istioEnabled" .) "true") (hasKey .Values.package "istio") (hasKey .Values.package.istio "hardened") (eq (dig "injection" "enabled" .Values.package.istio) "enabled") (dig  "enabled" false .Values.package.istio.hardened) (hasKey .Values.package.istio.hardened "matchLabels") -}}
 {{- if not (lookup "v1" "AuthorizationPolicy" .Release.Namespace "allow-all-in-namespace") }}
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy

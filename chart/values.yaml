@@ -10,6 +10,8 @@ bigbang:
     enabled: false
     hardened:
       enabled: false
+  istiod:
+    enabled: false
   monitoring:
     enabled: false
   addons:
