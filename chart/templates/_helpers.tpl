@@ -49,7 +49,7 @@ istio-controlplane
 {{- /* Returns name of istio Namespace Selector*/ -}}
 {{- define "istioNamespaceSelectorEgress" -}}
 {{- if .Values.bigbang.istiod.enabled -}}
-istio-core
+istio-system
 {{- else -}}
 istio-controlplane
 {{- end -}}
