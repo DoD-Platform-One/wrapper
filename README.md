@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # wrapper
 
-![Version: 0.4.14](https://img.shields.io/badge/Version-0.4.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 0.4.15](https://img.shields.io/badge/Version-0.4.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 Adds full Big Bang integration into a package
 
@@ -48,7 +48,7 @@ helm install wrapper chart/
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| bigbang | object | `{"addons":{"authservice":{"enabled":false,"values":{"selector":{"key":"protect","value":"keycloak"}}}},"domain":"bigbang.dev","istio":{"enabled":false,"hardened":{"enabled":false}},"monitoring":{"enabled":false},"networkPolicies":{"controlPlaneCidr":"0.0.0.0/0","controlPlaneNode":null,"enabled":false},"openshift":false}` | Passdown values from Big Bang |
+| bigbang | object | `{"addons":{"authservice":{"enabled":false,"values":{"selector":{"key":"protect","value":"keycloak"}}}},"domain":"bigbang.dev","istio":{"enabled":false,"hardened":{"enabled":false}},"istiod":{"enabled":false},"monitoring":{"enabled":false},"networkPolicies":{"controlPlaneCidr":"0.0.0.0/0","controlPlaneNode":null,"enabled":false},"openshift":false}` | Passdown values from Big Bang |
 | package | object | `{"configMaps":[],"istio":{"hardened":{"customAuthorizationPolicies":[],"enabled":"{{ .Values.bigbang.istio.values.hardened.enabled }}","matchLabels":{}},"hosts":[],"injection":"enabled","peerAuthentications":[]},"monitor":{"alerts":null,"dashboards":{},"encryptedMetrics":true,"services":[]},"name":"","namespace":{"name":null},"network":{"additionalPolicies":[],"allowControlPlaneEgress":false,"allowDnsEgress":true,"allowHttpsEgress":[],"allowIntraNamespace":true,"defaultDeny":true,"policies":true},"secrets":[],"sso":{"enabled":false},"values":{}}` | Passdown values from package |
 | package.name | Required | `""` | Name of the package |
 | package.namespace.name | string | Same as package.name | Name of the namespace.  Defaults to the same name as the package. |

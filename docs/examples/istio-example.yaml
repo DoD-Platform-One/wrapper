@@ -9,7 +9,7 @@ packages:
     enabled: true
     git:
       repo: https://github.com/stefanprodan/podinfo.git
-      branch: main
+      branch: master
       path: charts/podinfo
     wrapper:
       enabled: true

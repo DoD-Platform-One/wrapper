@@ -1,6 +1,6 @@
 apiVersion: v2
 name: wrapper
-version: 0.4.14
+version: 0.4.15
 description: Adds full Big Bang integration into a package
 sources:
   - https://repo1.dso.mil/big-bang/product/packages/wrapper
@@ -8,4 +8,4 @@ type: application
 annotations:
   bigbang.dev/maintenanceTrack: bb_integrated
   bigbang.dev/applicationVersions: |
-    - wrapper: 0.4.14
+    - wrapper: 0.4.15
