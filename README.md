@@ -1,24 +1,10 @@
-<!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # wrapper
 
 ![Version: 0.4.15](https://img.shields.io/badge/Version-0.4.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
-Adds full Big Bang integration into a package
-
 ## Upstream References
 
-- <https://repo1.dso.mil/big-bang/product/packages/wrapper>
-
-## Upstream Release Notes
-
-This package has no upstream release note links on file. Please add some to [chart/Chart.yaml](chart/Chart.yaml) under `annotations.bigbang.dev/upstreamReleaseNotesMarkdown`.
-Example:
-```yaml
-annotations:
-  bigbang.dev/upstreamReleaseNotesMarkdown: |
-    - [Find our upstream chart's CHANGELOG here](https://link-goes-here/CHANGELOG.md)
-    - [and our upstream application release notes here](https://another-link-here/RELEASE_NOTES.md)
-```
+There is no upstream for this chart. Wrapper is managed by the Big Bang team and is used to install external application helm charts. See [DEVELOPMENT_MAINTENANCE](/docs/DEVELOPMENT_MAINTENANCE.md) for more information on how to use this package.
 
 ## Learn More
 
@@ -34,15 +20,6 @@ annotations:
 Install Helm
 
 https://helm.sh/docs/intro/install/
-
-## Deployment
-
-- Clone down the repository
-- cd into directory
-
-```bash
-helm install wrapper chart/
-```
 
 ## Values
 
@@ -73,8 +50,3 @@ helm install wrapper chart/
 ## Contributing
 
 Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
-
----
-
-_This file is programatically generated using `helm-docs` and some BigBang-specific templates. The `gluon` repository has [instructions for regenerating package READMEs](https://repo1.dso.mil/big-bang/product/packages/gluon/-/blob/master/docs/bb-package-readme.md)._
-
